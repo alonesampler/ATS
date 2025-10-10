@@ -1,10 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Identity.Domain.Abstractions;
 
 namespace Identity.Domain.Events;
-internal class EmailConfirmedEvent
+
+public class EmailConfirmedEvent : DomainEvent
 {
+    public Guid UserId { get; }
+    public DateTime ConfirmedAt { get; }
+
+    public EmailConfirmedEvent(Guid userId)
+    {
+        UserId = userId;
+        ConfirmedAt = DateTime.UtcNow;
+    }
 }

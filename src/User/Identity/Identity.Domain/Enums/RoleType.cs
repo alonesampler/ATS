@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Identity.Domain.Enums;
 
-namespace Identity.Domain.Enums;
-internal class RoleType
+public enum RoleType
 {
+    Client = 1,
+    Admin = 2,
+    Manager = 3,
+    Technician = 4
 }

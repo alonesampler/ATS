@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Identity.Domain.Repositories;
 
-namespace Identity.Domain.Repositories;
-internal interface IRepository
+public interface IRepository<TEntity> where TEntity : class
 {
+    public Task AddAsync(TEntity entity);
+    public Task UpdateAsync(TEntity entity);
+    public Task DeleteAsync(TEntity entity);
 }

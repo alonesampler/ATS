@@ -1,10 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Identity.Domain.Abstractions;
+using Identity.Domain.ValueObjects;
 
 namespace Identity.Domain.Events;
-internal class PhoneNumberUpdatedEvent
+
+public class PhoneNumberUpdatedEvent : DomainEvent
 {
+    public Guid UserId { get; }
+    public string PhoneNumber { get; }
+    public DateTime UpdatedAt { get; }
+
+    public PhoneNumberUpdatedEvent(Guid userId, PhoneNumber phoneNumber)
+    {
+        UserId = userId;
+        PhoneNumber = phoneNumber.FullNumber;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

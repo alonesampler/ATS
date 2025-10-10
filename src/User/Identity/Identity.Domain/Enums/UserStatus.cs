@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Identity.Domain.Enums;
 
-namespace Identity.Domain.Enums;
-internal class UserStatus
+public enum UserStatus
 {
+    Active = 1,
+    Inactive = 2,
+    Suspended = 3,
+    EmailVerificationRequired = 4
 }
