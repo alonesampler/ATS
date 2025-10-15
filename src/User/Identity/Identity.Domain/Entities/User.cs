@@ -8,41 +8,46 @@ public class User : AggregateRoot<Guid>
 {
     private User() : base() { }
 
-    private User(Guid id, Email email, string firstName, string lastName, PasswordHash passwordHash)
+    private User(
+        Guid id,
+        Email email,
+        PhoneNumber? phoneNumber,
+        FullName fullName,
+        PasswordHash passwordHash,
+        DateTime registeredAt,
+        bool isEmailConfirmed)
         : base(id)
     {
         Email = email;
-        FirstName = firstName;
-        LastName = lastName;
         PasswordHash = passwordHash;
-        RegisteredAt = DateTime.UtcNow;
-        IsEmailConfirmed = false;
-        Balance = 0;
+        PhoneNumber = phoneNumber;
+        FullName = fullName;
+        RegisteredAt = registeredAt;
+        IsEmailConfirmed = isEmailConfirmed;
 
-        AddDomainEvent(new UserRegisteredEvent(Id, Email, FirstName, LastName));
+        AddDomainEvent(new UserRegisteredEvent(Id, Email, FullName.FirstName, FullName.LastName));
     }
 
     public Email Email { get; private set; }
     public PhoneNumber? PhoneNumber { get; private set; }
     public PasswordHash PasswordHash { get; private set; }
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
+    public FullName FullName { get; private set; }
     public DateTime RegisteredAt { get; private set; }
     public bool IsEmailConfirmed { get; private set; }
-    public decimal Balance { get; private set; }
 
-    public static User Register(Guid id, Email email, string firstName, string lastName, PasswordHash passwordHash)
+    public static User Register(
+        Guid id,
+        Email email,
+        PhoneNumber phoneNumber,
+        FullName fullName,
+        PasswordHash passwordHash,
+        DateTime registeredAt,
+        bool isEmailConfirmed)
     {
         if (Guid.Empty == id)
             throw new DomainException("Идентификатор пользователя не может быть пустым", "USER_ID_EMPTY");
 
-        if (string.IsNullOrWhiteSpace(firstName))
-            throw new DomainException("Имя не может быть пустым", "FIRST_NAME_EMPTY");
-
-        if (string.IsNullOrWhiteSpace(lastName))
-            throw new DomainException("Фамилия не может быть пустой", "LAST_NAME_EMPTY");
-
-        return new User(id, email, firstName, lastName, passwordHash);
+        return new User(id, email, phoneNumber, fullName, passwordHash, registeredAt, isEmailConfirmed);
     }
 
     public void ConfirmEmail()
@@ -67,26 +72,5 @@ public class User : AggregateRoot<Guid>
     {
         PhoneNumber = phoneNumber;
         AddDomainEvent(new PhoneNumberUpdatedEvent(Id, phoneNumber));
-    }
-
-    public void Deposit(decimal amount)
-    {
-        if (amount <= 0)
-            throw new DomainException("Сумма пополнения должна быть положительной", "INVALID_DEPOSIT_AMOUNT");
-
-        Balance += amount;
-        AddDomainEvent(new BalanceDepositedEvent(Id, amount, Balance));
-    }
-
-    public void Withdraw(decimal amount)
-    {
-        if (amount <= 0)
-            throw new DomainException("Сумма списания должна быть положительной", "INVALID_WITHDRAW_AMOUNT");
-
-        if (Balance < amount)
-            throw new DomainException("Недостаточно средств", "INSUFFICIENT_BALANCE");
-
-        Balance -= amount;
-        AddDomainEvent(new BalanceWithdrawnEvent(Id, amount, Balance));
     }
 }
