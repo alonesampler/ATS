@@ -38,7 +38,7 @@ public class User : AggregateRoot<Guid>
     public static User Register(
         Guid id,
         Email email,
-        PhoneNumber phoneNumber,
+        PhoneNumber? phoneNumber,
         FullName fullName,
         PasswordHash passwordHash,
         DateTime registeredAt,

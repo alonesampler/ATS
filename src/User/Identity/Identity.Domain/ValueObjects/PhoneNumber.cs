@@ -67,8 +67,7 @@ public class PhoneNumber : ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return CountryCode;
-        yield return Number;
+        yield return FullNumber;
     }
 
     public override string ToString() => FullNumber;

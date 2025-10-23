@@ -4,6 +4,6 @@ namespace Identity.Domain.Interfaces;
 
 public interface IPasswordHasher
 {
-    PasswordHash HashPassword(string password);
+    string HashPassword(string password);
     bool VerifyPassword(string password, PasswordHash passwordHash);
 }

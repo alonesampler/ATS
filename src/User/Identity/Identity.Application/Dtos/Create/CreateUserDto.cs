@@ -9,7 +9,7 @@ public class CreateUserDto
     /// <summary>
     /// Телефонный номер пользователя
     /// </summary>
-    public string? PhoneNumber { get; init; }
+    public CreatePhoneNumberDto? PhoneNumber { get; init; }
     /// <summary>
     /// ФИО пользователя
     /// </summary>
