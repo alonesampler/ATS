@@ -1,6 +1,6 @@
 ﻿namespace Identity.Application.Dtos.Create;
 
-public class CreatePhoneNumberDto
+public class PhoneNumberDto
 {
     /// <summary>
     /// Код страны телефонного номера

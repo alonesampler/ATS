@@ -1,9 +1,9 @@
 ﻿using FluentResults;
-using Identity.Application.Dtos.Create;
+using Identity.Application.Dtos.Request;
 
 namespace Identity.Application.Interfaces.UseCases;
 
 public interface IRegisterUserUseCase
 {
-    public Task<Result> ExecuteAsync(CreateUserDto createUserDto);
+    public Task<Result> ExecuteAsync(UserDto createUserDto);
 }

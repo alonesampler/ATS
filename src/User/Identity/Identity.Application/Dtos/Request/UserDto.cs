@@ -1,6 +1,6 @@
 ﻿namespace Identity.Application.Dtos.Create;
 
-public class CreateUserDto
+public class UserDto
 {
     /// <summary>
     /// Почтовый адрес пользователя
@@ -9,11 +9,11 @@ public class CreateUserDto
     /// <summary>
     /// Телефонный номер пользователя
     /// </summary>
-    public CreatePhoneNumberDto? PhoneNumber { get; init; }
+    public PhoneNumberDto? PhoneNumber { get; init; }
     /// <summary>
     /// ФИО пользователя
     /// </summary>
-    public CreateFullNameDto FullName { get; init; }
+    public FullNameDto FullName { get; init; }
     /// <summary>
     /// Пароль пользователя
     /// </summary>

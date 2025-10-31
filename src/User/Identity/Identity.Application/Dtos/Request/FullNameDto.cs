@@ -1,6 +1,6 @@
 ﻿namespace Identity.Application.Dtos.Create;
 
-public class CreateFullNameDto
+public class FullNameDto
 {
     /// <summary>
     /// Имя пользователя

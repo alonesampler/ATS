@@ -1,5 +1,5 @@
 ﻿using FluentResults;
-using Identity.Application.Dtos.Create;
+using Identity.Application.Dtos.Request;
 using Identity.Application.Interfaces.Producer;
 using Identity.Application.Interfaces.UseCases;
 using Identity.Domain.Entities;
@@ -24,7 +24,7 @@ public class RegisterUserUseCase : IRegisterUserUseCase
         _producer = producer;
     }
 
-    public async Task<Result> ExecuteAsync(CreateUserDto createUserDto)
+    public async Task<Result> ExecuteAsync(UserDto createUserDto)
     {
         var user = CreateUserFromDto(createUserDto);
 
@@ -42,7 +42,7 @@ public class RegisterUserUseCase : IRegisterUserUseCase
         return Result.Ok();
     }
 
-    private User CreateUserFromDto(CreateUserDto createUserDto)
+    private User CreateUserFromDto(UserDto createUserDto)
     {
         var userId = Guid.NewGuid();
 
