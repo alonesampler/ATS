@@ -6,12 +6,12 @@ public class PasswordHash : ValueObject
 {
     public string Value { get; }
 
-    public PasswordHash(string hash)
+    public PasswordHash(string value)
     {
-        if (string.IsNullOrWhiteSpace(hash))
+        if (string.IsNullOrWhiteSpace(value))
             throw new DomainException("Хэш пароля не может быть пустым", "PASSWORD_HASH_EMPTY");
 
-        Value = hash;
+        Value = value;
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

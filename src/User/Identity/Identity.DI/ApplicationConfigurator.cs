@@ -7,9 +7,8 @@ namespace Identity.DI;
 
 public static class ApplicationConfigurator
 {
-    public static void ConfigureApplication(IServiceCollection services, IConfiguration configuration)
+    public static void Configure(IServiceCollection services, IConfiguration configuration)
     {
-        // Application layer service registrations go here
         services.AddScoped<IRegisterUserUseCase, RegisterUserUseCase>();
     }
 }
