@@ -55,78 +55,23 @@ DomainEvent
 
 📁 Структура проекта
 text
-src/
-├── Identity.Domain/          # Доменный слой
-│   ├── Abstractions/        # Базовые абстракции
-│   ├── Users/              # Контекст пользователей
-│   ├── Computers/          # Контекст компьютеров
-│   ├── Sessions/           # Контекст сессий
-│   └── Payments/           # Контекст платежей
-├── Identity.Application/    # Слой приложения (Use Cases)
-├── Identity.Infrastructure/ # Инфраструктурный слой
-└── Identity.API/           # Web API слой
+
+
 🛠 Технологический стек
 Backend: .NET 8, ASP.NET Core, Entity Framework Core
 
-Database: PostgreSQL / SQL Server
+Database: PostgreSQL
 
 Authentication: JWT, Identity
 
-Payment: Integration with YooKassa/Stripe
-
 Real-time: SignalR для мониторинга сессий
-
-QR Generation: QRCoder или аналоги
 
 Caching: Redis для производительности
 
 Monitoring: OpenTelemetry, Health Checks
 
-💡 Ключевые доменные концепции
-Компьютер (Computer)
-Состояние (доступен, занят, на обслуживании)
 
-Характеристики (железо, ПО, тариф)
 
-QR-код для быстрого доступа
-
-Сессия (Session)
-Привязка к компьютеру и клиенту
-
-Тайминг начала/окончания
-
-Расчет стоимости
-
-Статусы (активна, завершена, отменена)
-
-Платеж (Payment)
-Интеграция с платежными системами
-
-Подтверждение транзакций
-
-История операций
-
-Клиент (Client)
-Профиль и предпочтения
-
-Баланс и история сессий
-
-QR-код для быстрого входа
-
-🔧 Быстрый старт
-Клонирование репозитория
-
-bash
-git clone https://github.com/your-org/computer-club-system.git
-cd computer-club-system
-Настройка окружения
-
-bash
-cp appsettings.Example.json appsettings.Development.json
-# Настройте строки подключения и платежные системы
-Запуск приложения
-
-bash
 dotnet restore
 dotnet run --project src/Identity.API
 📝 Лицензия
