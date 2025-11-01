@@ -4,7 +4,7 @@ using Identity.Domain.ValueObjects;
 
 namespace Identity.Domain.Entities;
 
-public class User : AggregateRoot<Guid>
+public class User : Entity<Guid>
 {
     private User() : base() { }
 
@@ -24,8 +24,6 @@ public class User : AggregateRoot<Guid>
         FullName = fullName;
         RegisteredAt = registeredAt;
         IsEmailConfirmed = isEmailConfirmed;
-
-        AddDomainEvent(new UserRegisteredEvent(Id, Email, FullName.FirstName, FullName.LastName));
     }
 
     public Email Email { get; private set; }
@@ -56,7 +54,6 @@ public class User : AggregateRoot<Guid>
             throw new DomainException("Email уже подтвержден", "EMAIL_ALREADY_CONFIRMED");
 
         IsEmailConfirmed = true;
-        AddDomainEvent(new EmailConfirmedEvent(Id));
     }
 
     public void ChangePassword(PasswordHash newPasswordHash)
@@ -65,12 +62,10 @@ public class User : AggregateRoot<Guid>
             throw new DomainException("Новый пароль не может быть пустым", "PASSWORD_EMPTY");
 
         PasswordHash = newPasswordHash;
-        AddDomainEvent(new PasswordChangedEvent(Id));
     }
 
     public void UpdatePhoneNumber(PhoneNumber phoneNumber)
     {
         PhoneNumber = phoneNumber;
-        AddDomainEvent(new PhoneNumberUpdatedEvent(Id, phoneNumber));
     }
 }

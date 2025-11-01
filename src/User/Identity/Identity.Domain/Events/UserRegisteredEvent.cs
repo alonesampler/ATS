@@ -1,20 +1,11 @@
 ﻿using Identity.Domain.Abstractions;
-using Identity.Domain.ValueObjects;
 
 namespace Identity.Domain.Events;
 
-public class UserRegisteredEvent : DomainEvent
+public class UserRegisteredEvent(Guid userId, string email, string firstName, string lastName) : DomainEvent
 {
-    public Guid UserId { get; }
-    public string Email { get; }
-    public string FirstName { get; }
-    public string LastName { get; }
-
-    public UserRegisteredEvent(Guid userId, Email email, string firstName, string lastName)
-    {
-        UserId = userId;
-        Email = email.Value;
-        FirstName = firstName;
-        LastName = lastName;
-    }
+    public Guid UserId { get; } = userId;
+    public string Email { get; } = email;
+    public string FirstName { get; } = firstName;
+    public string LastName { get; } = lastName;
 }

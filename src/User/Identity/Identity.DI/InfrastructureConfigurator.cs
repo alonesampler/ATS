@@ -1,5 +1,6 @@
 ﻿using Identity.Application;
 using Identity.Application.Interfaces.Producer;
+using Identity.Domain.Events;
 using Identity.Domain.Interfaces;
 using Identity.Infrastructure.Brokers;
 using Identity.Infrastructure.ConnectionStrings;
@@ -48,7 +49,7 @@ public static class InfrastructureConfigurator
 
             x.AddRider(rider =>
             {
-                rider.AddProducer<CreateUserMessage>("user-created");
+                rider.AddProducer<UserRegisteredEvent>("user-created");
 
                 rider.UsingKafka((context, k) =>
                 {

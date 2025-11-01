@@ -69,7 +69,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasColumnName("PhoneNumber")
                 .HasMaxLength(15);
         });
-
-        builder.Ignore(u => u.DomainEvents);
     }
 }

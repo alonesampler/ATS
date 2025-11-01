@@ -1,4 +1,4 @@
-﻿namespace Identity.Application.Dtos.Create;
+﻿namespace Identity.Application.Dtos.Request;
 
 public class PhoneNumberDto
 {

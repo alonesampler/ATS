@@ -3,6 +3,7 @@ using Identity.Application.Dtos.Request;
 using Identity.Application.Interfaces.Producer;
 using Identity.Application.Interfaces.UseCases;
 using Identity.Domain.Entities;
+using Identity.Domain.Events;
 using Identity.Domain.Interfaces;
 using Identity.Domain.ValueObjects;
 
@@ -12,12 +13,12 @@ public class RegisterUserUseCase : IRegisterUserUseCase
 {
     private readonly IPasswordHasher _passwordHasher;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IProducer<CreateUserMessage> _producer;
+    private readonly IProducer<UserRegisteredEvent> _producer;
 
     public RegisterUserUseCase(
         IPasswordHasher passwordHasher,
         IUnitOfWork unitOfWork,
-        IProducer<CreateUserMessage> producer)
+        IProducer<UserRegisteredEvent> producer)
     {
         _passwordHasher = passwordHasher;
         _unitOfWork = unitOfWork;
@@ -32,10 +33,12 @@ public class RegisterUserUseCase : IRegisterUserUseCase
         await _unitOfWork.UserRepository.AddAsync(user);
         await _unitOfWork.CommitTransactionAsync();
 
-        var message = new CreateUserMessage
-        {
-            UserId = user.Id
-        };
+        var message = new UserRegisteredEvent(
+            user.Id,
+            user.Email.Value,
+            user.FullName.FirstName,
+            user.FullName.LastName
+            );
 
         await _producer.ProduceAsync(message);
 

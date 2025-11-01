@@ -13,14 +13,10 @@ public class FullName : ValueObject
     public FullName(string firstName, string lastName, string? middleName = null)
     {
         if (string.IsNullOrWhiteSpace(firstName))
-        {
             throw new DomainException("Имя не может быть пустым.", nameof(firstName));
-        }
 
         if (string.IsNullOrWhiteSpace(lastName))
-        {
             throw new DomainException("Фамилия не может быть пустой", nameof(lastName));
-        }
 
         FirstName = firstName;
         LastName = lastName;
