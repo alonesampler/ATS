@@ -69,5 +69,16 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasColumnName("PhoneNumber")
                 .HasMaxLength(15);
         });
+
+        // Value Object: VereficationCode (nullable)
+        builder.OwnsOne(u => u.EmailConfirmationCode, code =>
+        {
+            code.Property(c => c.Code)
+                .HasColumnName("EmailConfirmationCode")
+                .HasMaxLength(6);
+
+            code.Property(c => c.ExpiresAt)
+                .HasColumnName("EmailConfirmationCodeExpiresAt");
+        });
     }
 }

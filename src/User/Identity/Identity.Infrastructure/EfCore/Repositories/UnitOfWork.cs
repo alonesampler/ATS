@@ -2,7 +2,7 @@
 using Identity.Infrastructure.EfCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Identity.Infrastructure.Implementations.Repositories;
+namespace Identity.Infrastructure.EfCore.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {

@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Infrastructure", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Api", "Identity.Api\Identity.Api.csproj", "{7E95E243-6E8B-4A89-9D93-10970A5EBEDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.DI", "Identity.DI\Identity.DI.csproj", "{B32D117C-2EC6-4599-81D1-BFFA636E861D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,10 +39,6 @@ Global
 		{7E95E243-6E8B-4A89-9D93-10970A5EBEDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E95E243-6E8B-4A89-9D93-10970A5EBEDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E95E243-6E8B-4A89-9D93-10970A5EBEDD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B32D117C-2EC6-4599-81D1-BFFA636E861D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B32D117C-2EC6-4599-81D1-BFFA636E861D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B32D117C-2EC6-4599-81D1-BFFA636E861D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B32D117C-2EC6-4599-81D1-BFFA636E861D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

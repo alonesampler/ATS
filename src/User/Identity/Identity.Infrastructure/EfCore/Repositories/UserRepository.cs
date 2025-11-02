@@ -3,7 +3,7 @@ using Identity.Domain.Interfaces;
 using Identity.Infrastructure.EfCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Infrastructure.Implementations.Repositories;
+namespace Identity.Infrastructure.EfCore.Repositories;
 
 public class UserRepository : IUserRepository
 {

@@ -1,12 +1,12 @@
-﻿using Identity.Application;
-using Identity.Application.Interfaces.Producer;
+﻿using Identity.Application.Interfaces.Producer;
 using Identity.Domain.Events;
 using Identity.Domain.Interfaces;
 using Identity.Infrastructure.Brokers;
 using Identity.Infrastructure.ConnectionStrings;
+using Identity.Infrastructure.ConStrings;
 using Identity.Infrastructure.EfCore;
+using Identity.Infrastructure.EfCore.Repositories;
 using Identity.Infrastructure.Hasher;
-using Identity.Infrastructure.Implementations.Repositories;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -45,11 +45,15 @@ public static class InfrastructureConfigurator
     {
         services.AddMassTransit(x =>
         {
-            x.UsingInMemory();
+            x.UsingInMemory((context, cfg) =>
+                {
+                    cfg.ConfigureEndpoints(context);
+                });
 
             x.AddRider(rider =>
             {
                 rider.AddProducer<UserRegisteredEvent>("user-created");
+                rider.AddProducer<EmailConfirmedEvent>("email-confirmed");
 
                 rider.UsingKafka((context, k) =>
                 {

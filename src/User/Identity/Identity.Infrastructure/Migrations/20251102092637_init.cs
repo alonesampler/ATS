@@ -28,7 +28,9 @@ namespace Identity.Infrastructure.Migrations
                     LastName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     MiddleName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     RegisteredAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsEmailConfirmed = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
+                    IsEmailConfirmed = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    EmailConfirmationCode = table.Column<string>(type: "character varying(6)", maxLength: 6, nullable: true),
+                    EmailConfirmationCodeExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {

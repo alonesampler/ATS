@@ -37,7 +37,8 @@ public class RegisterUserUseCase : IRegisterUserUseCase
             user.Id,
             user.Email.Value,
             user.FullName.FirstName,
-            user.FullName.LastName
+            user.FullName.LastName,
+            user.EmailConfirmationCode
             );
 
         await _producer.ProduceAsync(message);
@@ -66,6 +67,7 @@ public class RegisterUserUseCase : IRegisterUserUseCase
 
         var registeredAt = DateTime.UtcNow;
         var isEmailConfirmed = false;
+        var confirmationCode = VereficationCode.Create();
 
         return User.Register(
             userId,
@@ -74,7 +76,8 @@ public class RegisterUserUseCase : IRegisterUserUseCase
             fullName,
             passwordHash,
             registeredAt,
-            isEmailConfirmed
+            isEmailConfirmed,
+            confirmationCode
             );
     }
 }

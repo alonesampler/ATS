@@ -1,5 +1,4 @@
 ﻿using Identity.Domain.Abstractions;
-using Identity.Domain.Events;
 using Identity.Domain.ValueObjects;
 
 namespace Identity.Domain.Entities;
@@ -15,7 +14,8 @@ public class User : Entity<Guid>
         FullName fullName,
         PasswordHash passwordHash,
         DateTime registeredAt,
-        bool isEmailConfirmed)
+        bool isEmailConfirmed,
+        VereficationCode confirmationCode)
         : base(id)
     {
         Email = email;
@@ -24,6 +24,7 @@ public class User : Entity<Guid>
         FullName = fullName;
         RegisteredAt = registeredAt;
         IsEmailConfirmed = isEmailConfirmed;
+        EmailConfirmationCode = confirmationCode;
     }
 
     public Email Email { get; private set; }
@@ -32,6 +33,7 @@ public class User : Entity<Guid>
     public FullName FullName { get; private set; }
     public DateTime RegisteredAt { get; private set; }
     public bool IsEmailConfirmed { get; private set; }
+    public VereficationCode? EmailConfirmationCode { get; private set; }
 
     public static User Register(
         Guid id,
@@ -40,20 +42,30 @@ public class User : Entity<Guid>
         FullName fullName,
         PasswordHash passwordHash,
         DateTime registeredAt,
-        bool isEmailConfirmed)
+        bool isEmailConfirmed,
+        VereficationCode? confirmationCode)
     {
         if (Guid.Empty == id)
             throw new DomainException("Идентификатор пользователя не может быть пустым", "USER_ID_EMPTY");
 
-        return new User(id, email, phoneNumber, fullName, passwordHash, registeredAt, isEmailConfirmed);
+        return new User(id, email, phoneNumber, fullName, passwordHash, registeredAt, isEmailConfirmed, confirmationCode);
     }
 
-    public void ConfirmEmail()
+    public void ConfirmEmail(string confirmationCode)
     {
         if (IsEmailConfirmed)
             throw new DomainException("Email уже подтвержден", "EMAIL_ALREADY_CONFIRMED");
 
+        if (EmailConfirmationCode is null || EmailConfirmationCode.Code != confirmationCode || EmailConfirmationCode.IsExpired())
+            throw new DomainException("Неверный код подтверждения", "INVALID_CONFIRMATION_CODE");
+
+        EmailConfirmationCode = null;
         IsEmailConfirmed = true;
+    }
+
+    public void GenerateNewVerificationCode()
+    {
+        EmailConfirmationCode = VereficationCode.Create();
     }
 
     public void ChangePassword(PasswordHash newPasswordHash)

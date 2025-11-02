@@ -19,4 +19,17 @@ public class UsersController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPost("confirm-email/{id:guid}")]
+    public async Task<ActionResult> ConfirmEmail(Guid id,
+        [FromBody] string requestCode,
+        [FromServices] IConfirmEmailUseCase useCase)
+    {
+        var result = await useCase.ExecuteAsync(id, requestCode);
+
+        if (result.IsFailed)
+            return BadRequest(result.Errors);
+
+        return Ok();
+    }
 }

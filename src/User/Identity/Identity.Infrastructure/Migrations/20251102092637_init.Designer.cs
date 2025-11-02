@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Infrastructure.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20251031010045_init")]
+    [Migration("20251102092637_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -143,8 +143,33 @@ namespace Identity.Infrastructure.Migrations
                                 .HasForeignKey("UserId");
                         });
 
+                    b.OwnsOne("Identity.Domain.ValueObjects.VereficationCode", "EmailConfirmationCode", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Code")
+                                .IsRequired()
+                                .HasMaxLength(6)
+                                .HasColumnType("character varying(6)")
+                                .HasColumnName("EmailConfirmationCode");
+
+                            b1.Property<DateTime>("ExpiresAt")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("EmailConfirmationCodeExpiresAt");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("Users", "identity");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
                     b.Navigation("Email")
                         .IsRequired();
+
+                    b.Navigation("EmailConfirmationCode");
 
                     b.Navigation("FullName")
                         .IsRequired();
