@@ -31,24 +31,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .IsUnique();
         });
 
-        // Value Object: FullName
-        builder.OwnsOne(u => u.FullName, fullName =>
-        {
-            fullName.Property(f => f.FirstName)
-                .HasColumnName("FirstName")
-                .IsRequired()
-                .HasMaxLength(100);
-
-            fullName.Property(f => f.LastName)
-                .HasColumnName("LastName")
-                .IsRequired()
-                .HasMaxLength(100);
-
-            fullName.Property(f => f.MiddleName)
-                .HasColumnName("MiddleName")
-                .HasMaxLength(100);
-        });
-
         // Value Object: PasswordHash
         builder.OwnsOne(u => u.PasswordHash, password =>
         {

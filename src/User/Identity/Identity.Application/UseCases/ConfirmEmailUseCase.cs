@@ -6,41 +6,28 @@ using Identity.Domain.Interfaces;
 
 namespace Identity.Application.UseCases;
 
-public class ConfirmEmailUseCase : IConfirmEmailUseCase
+public class ConfirmEmailUseCase(
+    IUnitOfWork unitOfWork,
+    IProducer<EmailConfirmedEvent> producer) : IConfirmEmailUseCase
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IProducer<EmailConfirmedEvent> _producer;
-
-    public ConfirmEmailUseCase(
-        IUnitOfWork unitOfWork,
-        IProducer<EmailConfirmedEvent> producer)
-    {
-        _unitOfWork = unitOfWork;
-        _producer = producer;
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IProducer<EmailConfirmedEvent> _producer = producer;
 
     public async Task<Result> ExecuteAsync(Guid userId, string code)
     {
         var user = await _unitOfWork.UserRepository.GetByIdAsync(userId);
 
         if (user is null)
-            return Result.Fail("User not found");
+            return Result.Fail(ErrorMessage.UserNotFound);
 
         await _unitOfWork.BeginTransactionAsync();
         user.ConfirmEmail(code);
         await _unitOfWork.UserRepository.UpdateAsync(user);
         await _unitOfWork.CommitTransactionAsync();
 
-        var fullNumber = user.PhoneNumber != null
-            ? $"{user.PhoneNumber.CountryCode}{user.PhoneNumber.Number}"
-            : null;
-
         var message = new EmailConfirmedEvent(
             user.Id,
-            user.Email.Value,
-            user.FullName.FirstName,
-            user.FullName.LastName,
-            fullNumber);
+            user.Email.Value);
 
         await _producer.ProduceAsync(message);
 

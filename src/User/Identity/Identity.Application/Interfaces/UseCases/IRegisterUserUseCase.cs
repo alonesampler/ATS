@@ -1,5 +1,5 @@
 ﻿using FluentResults;
-using Identity.Application.Dtos.Request;
+using Identity.Application.Dtos.Params;
 
 namespace Identity.Application.Interfaces.UseCases;
 

@@ -1,5 +1,5 @@
 ﻿using FluentResults;
-using Identity.Application.Dtos.Request;
+using Identity.Application.Dtos.Params;
 using Identity.Application.Interfaces.Producer;
 using Identity.Application.Interfaces.UseCases;
 using Identity.Domain.Entities;
@@ -9,36 +9,35 @@ using Identity.Domain.ValueObjects;
 
 namespace Identity.Application.UseCases;
 
-public class RegisterUserUseCase : IRegisterUserUseCase
+public class RegisterUserUseCase(
+    IPasswordHasher passwordHasher,
+    IUnitOfWork unitOfWork,
+    IProducer<UserRegisteredEvent> producer) : IRegisterUserUseCase
 {
-    private readonly IPasswordHasher _passwordHasher;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IProducer<UserRegisteredEvent> _producer;
+    private readonly IPasswordHasher _passwordHasher = passwordHasher;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IProducer<UserRegisteredEvent> _producer = producer;
 
-    public RegisterUserUseCase(
-        IPasswordHasher passwordHasher,
-        IUnitOfWork unitOfWork,
-        IProducer<UserRegisteredEvent> producer)
+    public async Task<Result> ExecuteAsync(UserDto dto)
     {
-        _passwordHasher = passwordHasher;
-        _unitOfWork = unitOfWork;
-        _producer = producer;
-    }
+        var user = await _unitOfWork.UserRepository.GetByEmailAsync(dto.Email);
+        
+        if (user is not  null)
+            return Result.Fail(ErrorMessage.EmailAlreadyExists);
 
-    public async Task<Result> ExecuteAsync(UserDto createUserDto)
-    {
-        var user = CreateUserFromDto(createUserDto);
+        var newUser = CreateUserFromDto(dto);
 
         await _unitOfWork.BeginTransactionAsync();
-        await _unitOfWork.UserRepository.AddAsync(user);
+        await _unitOfWork.UserRepository.AddAsync(newUser);
         await _unitOfWork.CommitTransactionAsync();
 
         var message = new UserRegisteredEvent(
-            user.Id,
-            user.Email.Value,
-            user.FullName.FirstName,
-            user.FullName.LastName,
-            user.EmailConfirmationCode
+            newUser.Id,
+            newUser.Email.Value,
+            dto.FullName.FirstName,
+            dto.FullName.LastName,
+            dto.FullName.MiddleName,
+            newUser.EmailConfirmationCode
             );
 
         await _producer.ProduceAsync(message);
@@ -46,23 +45,17 @@ public class RegisterUserUseCase : IRegisterUserUseCase
         return Result.Ok();
     }
 
-    private User CreateUserFromDto(UserDto createUserDto)
+    private User CreateUserFromDto(UserDto dto)
     {
         var userId = Guid.NewGuid();
 
-        var email = new Email(createUserDto.Email);
+        var email = new Email(dto.Email);
 
-        var phoneNumber = createUserDto.PhoneNumber != null
-            ? new PhoneNumber(createUserDto.PhoneNumber.CountryCode, createUserDto.PhoneNumber.Number)
+        var phoneNumber = dto.PhoneNumber != null
+            ? new PhoneNumber(dto.PhoneNumber.CountryCode, dto.PhoneNumber.Number)
             : null;
 
-        var fullName = new FullName(
-            createUserDto.FullName.FirstName,
-            createUserDto.FullName.LastName,
-            createUserDto.FullName.MiddleName
-            );
-
-        var hashedPassword = _passwordHasher.HashPassword(createUserDto.Password);
+        var hashedPassword = _passwordHasher.HashPassword(dto.Password);
         var passwordHash = new PasswordHash(hashedPassword);
 
         var registeredAt = DateTime.UtcNow;
@@ -73,7 +66,6 @@ public class RegisterUserUseCase : IRegisterUserUseCase
             userId,
             email,
             phoneNumber,
-            fullName,
             passwordHash,
             registeredAt,
             isEmailConfirmed,

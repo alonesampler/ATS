@@ -1,4 +1,4 @@
-﻿using Identity.Application.Dtos.Request;
+﻿using Identity.Application.Dtos.Params;
 using Identity.Application.Interfaces.UseCases;
 using Microsoft.AspNetCore.Mvc;
 

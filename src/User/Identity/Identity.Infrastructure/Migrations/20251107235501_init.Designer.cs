@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Infrastructure.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20251102092637_init")]
+    [Migration("20251107235501_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -62,36 +62,6 @@ namespace Identity.Infrastructure.Migrations
 
                             b1.HasIndex("Value")
                                 .IsUnique();
-
-                            b1.ToTable("Users", "identity");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId");
-                        });
-
-                    b.OwnsOne("Identity.Domain.ValueObjects.FullName", "FullName", b1 =>
-                        {
-                            b1.Property<Guid>("UserId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<string>("FirstName")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
-                                .HasColumnName("FirstName");
-
-                            b1.Property<string>("LastName")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
-                                .HasColumnName("LastName");
-
-                            b1.Property<string>("MiddleName")
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
-                                .HasColumnName("MiddleName");
-
-                            b1.HasKey("UserId");
 
                             b1.ToTable("Users", "identity");
 
@@ -170,9 +140,6 @@ namespace Identity.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("EmailConfirmationCode");
-
-                    b.Navigation("FullName")
-                        .IsRequired();
 
                     b.Navigation("PasswordHash")
                         .IsRequired();
