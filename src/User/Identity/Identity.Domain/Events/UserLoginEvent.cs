@@ -15,8 +15,6 @@ public class UserLoginEvent(
     public Guid UserId { get; } = userId;
     public Guid SessionId { get; } = sessionId;
     public string Email { get; } = email;
-    public string IpAddress { get; } = ipAddress;
-    public string DeviceInfo { get; } = deviceInfo;
     public VereficationCode? VerificationCode { get; } = verificationCode;
     public bool IsEmailConfirmed { get; } = isEmailConfirmed;
 }

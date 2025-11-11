@@ -4,6 +4,7 @@ namespace Identity.Domain.Interfaces;
 
 public interface ISessionRepository
 {
+    Task<IEnumerable<Session>> GetAllByUserIdAsync(Guid userId);
     Task<Session?> GetByIdAsync(Guid sessionId);
     Task AddAsync(Session session);
     Task RemoveAsync(Guid sessionId);
