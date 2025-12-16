@@ -1,5 +1,4 @@
 ﻿using Identity.Domain.Interfaces;
-using Identity.Infrastructure.EfCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Identity.Infrastructure.EfCore.Repositories;
@@ -9,13 +8,18 @@ public class UnitOfWork : IUnitOfWork
     private readonly IdentityDbContext _dbContext;
     private IDbContextTransaction _currentTransaction;
 
-    public UnitOfWork(IdentityDbContext dbContext, IUserRepository userRepository)
+    public UnitOfWork(
+        IdentityDbContext dbContext,
+        IUserRepository userRepository,
+        ISessionRepository sessionRepository)
     {
         _dbContext = dbContext;
         UserRepository = userRepository;
+        SessionRepository = sessionRepository;
     }
 
     public IUserRepository UserRepository { get; }
+    public ISessionRepository SessionRepository { get; }
 
     public void Dispose()
         => _dbContext.Dispose();
@@ -54,7 +58,7 @@ public class UnitOfWork : IUnitOfWork
         {
             if (_currentTransaction is not null)
             {
-                await _currentTransaction.DisposeAsync(); // будет закрыта сама транзакция.
+                await _currentTransaction.DisposeAsync();
                 _currentTransaction = null;
             }
         }

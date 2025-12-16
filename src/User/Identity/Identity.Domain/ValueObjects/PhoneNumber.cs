@@ -6,7 +6,7 @@ public class PhoneNumber : ValueObject
 {
     public string CountryCode { get; }
     public string Number { get; }
-
+    
     public PhoneNumber(string countryCode, string number)
     {
         if (string.IsNullOrWhiteSpace(countryCode))
